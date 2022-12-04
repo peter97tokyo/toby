@@ -111,7 +111,7 @@ public class HomeController {
 		
 		
 		
-		return "webAndJava";
+		return "univ/whatIsJsp";
 	}
 	
 }
