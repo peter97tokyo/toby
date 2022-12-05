@@ -1,9 +1,11 @@
 package com.kim.test;
 
+import static org.junit.Assert.assertThat;
+
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Locale;
-
+import java.util.Locale;import org.hamcrest.core.Is;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.kim.test.hello.hello;
+
+import junit.framework.Test;
 
 
 @Controller
@@ -34,6 +38,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
+		
 		// 1장 : IoC 컨테이너를 이용해 애플리케이션 만들기 1-1
 		
 		StaticApplicationContext ac = new StaticApplicationContext(); // <== ApplicationContext 인터페이스를 구현한 오브젝트
@@ -107,8 +112,17 @@ public class HomeController {
 		// 프로퍼티 설정이 됐는지 확인한다.
 		
 		//assertThat(hello2.sayHello(), is("hello spring"));
+		
 		// 없음... 토비의 스프링에는 있지만 없다
 		
+		// 221205 =================================================================================
+		
+		// 빈 생성을 위한 설정 메타정보는 앞에서와 마찬가지로 RootBeanDefinition을 이용해 정의한다. 
+		// .addPropertyValue() 메소드에는 값 외에도 BeanReference 타입의 래퍼런스 오브젝트를 넣을 수 있다.
+		
+
+
+
 		
 		
 		return "univ/whatIsJsp";

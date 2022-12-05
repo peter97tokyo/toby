@@ -19,7 +19,7 @@ public class hello {
 		this.name = name;
 	}
 	
-	public void setPrinter(helloService hs) {
+	public void setHelloService(helloService hs) {
 		this.hs = hs;
 	}
 }

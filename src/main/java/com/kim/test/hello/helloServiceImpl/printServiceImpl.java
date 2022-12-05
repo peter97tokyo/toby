@@ -2,7 +2,7 @@ package com.kim.test.hello.helloServiceImpl;
 
 import com.kim.test.hello.helloService.helloService;
 
-public class helloServiceImpl implements helloService{
+public class printServiceImpl implements helloService{
 	private StringBuffer strBuf = new StringBuffer();
 	
 	@Override
