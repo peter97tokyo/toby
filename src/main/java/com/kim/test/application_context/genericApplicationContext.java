@@ -15,7 +15,7 @@ public class genericApplicationContext {
 		
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(ac);
 		
-		reader.loadBeanDefinitions("/spring/genericContext.xml");
+		reader.loadBeanDefinitions("/bean_object/xml/beans.xml");
 		ac.refresh();
 		hello hello = (com.kim.test.hello.hello) ac.getBean("hello");
 		hello.print();
