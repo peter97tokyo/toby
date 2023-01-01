@@ -125,7 +125,7 @@ public class HomeController {
 
 		
 		
-		return "univ/whatIsJsp";
+		return "univ/objectScope";
 	}
 	
 }
