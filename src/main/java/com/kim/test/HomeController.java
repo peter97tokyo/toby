@@ -9,15 +9,23 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.kim.test.application_context.genericApplicationContext;
 import com.kim.test.hello.hello;
+import com.kim.test.hello.helloService.helloService;
 
 import junit.framework.Test;
 
@@ -120,12 +128,43 @@ public class HomeController {
 		// 빈 생성을 위한 설정 메타정보는 앞에서와 마찬가지로 RootBeanDefinition을 이용해 정의한다. 
 		// .addPropertyValue() 메소드에는 값 외에도 BeanReference 타입의 래퍼런스 오브젝트를 넣을 수 있다.
 		
-
-
-
-		
-		
+		// 230101 =================================================================================
+		/*
+		 * 스프링 애플리케이션에서 가장 많이 사용되는 애플리케이션 컨텍스트는 WebApplicationContext이다. 
+		 * WebApplicationContext는 ApplicationContext를 확장한 인터페이스이다.
+		 * 
+		 * 
+		 */
 		return "univ/objectScope";
 	}
 	
+	@RequestMapping(value="/parentChild", method =RequestMethod.GET)
+	public String parentChild() {
+		// parentContext.xml을 사용하는 부모 컨텍스트를 만들자. 
+		// 이 컨텍스트는 더 이상 상위에 부모 컨텍스트가 존재하지 않는 루트 컨텍스트다.스스로 완전한 빈 의존관계를 보장해야 한다.
+		
+		ApplicationContext parent = new GenericXmlApplicationContext("/bean_object/xml/parentContext.xml");
+		// GenericXmlApplicationContext는 XML을 사용하는 루트 컨텍스트를 만들 때만 사용할 수 있게 만든 편리한 클래스임
+		
+		// 세밀한 컨텍스트 컨트롤 설정하기 위해서는 genericApplicationContext를 이용해야 한다.
+		// 다음은 childContext.xml을 사용하는 자식 컨텍스트를 만들 차례다.
+		GenericApplicationContext child = new GenericApplicationContext(parent);
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(child);
+		reader.loadBeanDefinitions("/bean_object/xml/childContext.xml");
+		child.refresh();
+		// 설정 메타정보를 읽고 refresh() 해주면 컨텍스트를 초기화하면서 DI를 진행한다.
+		
+		/*
+		 * 이제 parent와 child에 담긴 두개의 컨텍스트는 부모/자식 관계로 연결되어있다.
+		 * 이때 자식 컨텍스트인 child에게 printer라는 이름의 빈을 요청하면 어떻게 될까?????????????
+		 * 
+		 *  일반적인 경우 null이지만 부모 컨텍스트 이기 때문에 parent 컨텍스트에서 검색을 시도한다.*/
+		helloService hs = child.getBean("helloService", helloService.class);
+		System.out.println(hs);
+		System.out.println("====확인====");
+		hello hello = child.getBean("hello", hello.class);
+		hello.print();
+		
+		return "univ/objectScope";
+	}
 }
